@@ -39,12 +39,12 @@ bigfloat(c(Inf, -Inf, NaN))
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  # summary
-#  sum(x)
-#  prod(x)
-#  max(x)
-#  min(x)
-#  range(x)
-#  mean(x)
+#  sum(..., na.rm = FALSE)
+#  prod(..., na.rm = FALSE)
+#  max(x, ..., na.rm = FALSE)
+#  min(x, ..., na.rm = FALSE)
+#  range(x, ..., na.rm = FALSE)
+#  mean(x, ..., na.rm = FALSE)
 #  
 #  # cumulative
 #  cumsum(x)
@@ -63,7 +63,7 @@ bigfloat(c(Inf, -Inf, NaN))
 #  sqrt(x)
 #  
 #  # logarithms and exponentials
-#  log(x)
+#  log(x, base = exp(1))
 #  log10(x)
 #  log2(x)
 #  log1p(x)
@@ -92,6 +92,8 @@ bigfloat(c(Inf, -Inf, NaN))
 #  # special functions
 #  gamma(x)
 #  lgamma(x)
+#  digamma(x)
+#  trigamma(x)
 #  factorial(x)
 #  lfactorial(x)
 

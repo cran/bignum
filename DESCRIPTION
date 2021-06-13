@@ -1,6 +1,6 @@
 Package: bignum
 Title: Arbitrary-Precision Integer and Floating-Point Mathematics
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     person(given = "David",
            family = "Hall",
@@ -18,8 +18,8 @@ URL: https://davidchall.github.io/bignum/,
         https://github.com/davidchall/bignum
 BugReports: https://github.com/davidchall/bignum/issues
 Depends: R (>= 3.3.0)
-Imports: rlang, vctrs (>= 0.3.0)
-Suggests: knitr, rmarkdown, testthat
+Imports: ellipsis, rlang, vctrs (>= 0.3.0)
+Suggests: knitr, pillar (>= 1.6.0), rmarkdown, testthat
 LinkingTo: BH, cpp11
 VignetteBuilder: knitr
 Config/testthat/edition: 3
@@ -27,8 +27,8 @@ Encoding: UTF-8
 RoxygenNote: 7.1.1
 SystemRequirements: C++11
 NeedsCompilation: yes
-Packaged: 2021-05-12 14:33:54 UTC; david
+Packaged: 2021-06-13 03:22:17 UTC; david
 Author: David Hall [aut, cre, cph] (<https://orcid.org/0000-0002-2193-0480>)
 Maintainer: David Hall <david.hall.physics@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-05-14 08:42:11 UTC
+Date/Publication: 2021-06-13 04:40:29 UTC

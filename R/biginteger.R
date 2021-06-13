@@ -10,7 +10,11 @@
 #' @return An S3 vector of class `bignum_biginteger`.
 #'
 #' @examples
-#' biginteger(1:5)^10L
+#' # default options limit displayed precision
+#' biginteger(2)^50L
+#'
+#' # display full precision
+#' format(biginteger(2)^50L, notation = "dec")
 #'
 #' # lossy casts raise a warning
 #' biginteger(c(2, 2.5, 3))
@@ -128,8 +132,10 @@ vec_cast.integer.bignum_biginteger <- function(x, to, ..., x_arg = "", to_arg = 
 
 #' @export
 vec_cast.bignum_biginteger.double <- function(x, to, ..., x_arg = "", to_arg = "") {
-  out <- new_biginteger(as.character(x))
-  lossy <- floor(x) != x & !is.na(x)
+  x_big <- vec_cast(x, new_bigfloat())
+  rounded <- trunc(x_big)
+  out <- new_biginteger(vec_data(rounded))
+  lossy <- (rounded != x_big & !is.na(x)) | is.infinite(x)
   maybe_lossy_cast(out, x, to, lossy, x_arg = x_arg, to_arg = to_arg)
 }
 
@@ -137,6 +143,14 @@ vec_cast.bignum_biginteger.double <- function(x, to, ..., x_arg = "", to_arg = "
 vec_cast.double.bignum_biginteger <- function(x, to, ..., x_arg = "", to_arg = "") {
   out <- c_biginteger_to_double(x)
   lossy <- abs(x) >= biginteger(2)^53L & !is.na(x)
+  maybe_lossy_cast(out, x, to, lossy, x_arg = x_arg, to_arg = to_arg)
+}
+
+#' @export
+vec_cast.bignum_biginteger.bignum_bigfloat <- function(x, to, ..., x_arg = "", to_arg = "") {
+  rounded <- trunc(x)
+  out <- new_biginteger(vec_data(rounded))
+  lossy <- (rounded != x & !is.na(x)) | is.infinite(x)
   maybe_lossy_cast(out, x, to, lossy, x_arg = x_arg, to_arg = to_arg)
 }
 

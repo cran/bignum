@@ -18,7 +18,7 @@ vec_math_bigfloat <- function(.fn, .x, ..., na.rm = FALSE) {
     cummin = c_bigfloat_cummin(.x),
     exp = c_bigfloat_exp(.x),
     expm1 = c_bigfloat_expm1(.x),
-    log = c_bigfloat_log(.x),
+    log = bigfloat_log(.x, ...),
     log10 = c_bigfloat_log10(.x),
     log2 = c_bigfloat_log2(.x),
     log1p = c_bigfloat_log1p(.x),
@@ -39,12 +39,14 @@ vec_math_bigfloat <- function(.fn, .x, ..., na.rm = FALSE) {
     atanh = c_bigfloat_atanh(.x),
     gamma = c_bigfloat_gamma(.x),
     lgamma = c_bigfloat_lgamma(.x),
+    digamma = c_bigfloat_digamma(.x),
+    trigamma = c_bigfloat_trigamma(.x),
 
     # Other
     mean = c_bigfloat_sum(.x, na.rm) / sum(!is.na(.x)),
-    is.nan = is.nan(allow_lossy_cast(vec_cast(.x, double()))),
-    is.infinite = is.infinite(allow_lossy_cast(vec_cast(.x, double()))),
-    is.finite = is.finite(allow_lossy_cast(vec_cast(.x, double()))),
+    is.nan = vec_data(.x) %|% "NA" == "NaN",
+    is.infinite = vec_data(.x) %in% c("Inf", "-Inf"),
+    is.finite = !(vec_data(.x) %in% c(NA, "NaN", "Inf", "-Inf")),
 
     # else
     stop_unsupported(.x, .fn)
@@ -77,11 +79,21 @@ vec_math.bignum_biginteger <- function(.fn, .x, ..., na.rm = FALSE) {
 
     # Other
     mean = c_biginteger_sum(.x, na.rm) / sum(!is.na(.x)),
-    is.nan = rep_len(FALSE, length(.x)),
+    is.nan = rep_along(.x, FALSE),
     is.finite = !is.na(.x),
-    is.infinite = rep_len(FALSE, length(.x)),
+    is.infinite = rep_along(.x, FALSE),
 
     # else
     vec_math_bigfloat(.fn, .x, ..., na.rm = na.rm)
   )
+}
+
+# functions with unnamed arguments require special handling --------------------
+
+bigfloat_log <- function(x, base) {
+  if (is_missing(base)) {
+    c_bigfloat_log(x)
+  } else {
+    c_bigfloat_log(x) / c_bigfloat_log(vec_cast(base, bigfloat()))
+  }
 }

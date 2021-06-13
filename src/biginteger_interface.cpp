@@ -1,7 +1,10 @@
 #include <cpp11.hpp>
+#include "biginteger_vector.h"
 #include "operations.h"
 #include "compare.h"
-#include "biginteger_vector.h"
+#include "format.h"
+
+namespace mp = boost::multiprecision;
 
 
 [[cpp11::register]]
@@ -82,8 +85,15 @@ cpp11::doubles c_biginteger_to_double(cpp11::strings x) {
  *  Other  *
  *---------*/
 [[cpp11::register]]
-cpp11::strings c_biginteger_format(cpp11::strings x) {
-  return biginteger_vector(x).format();
+cpp11::strings c_biginteger_format(cpp11::strings x, cpp11::strings notation) {
+  if (notation.size() != 1) {
+    cpp11::stop("`notation` must be a scalar."); // # nocov
+  }
+
+  return format_biginteger_vector(
+    biginteger_vector(x),
+    format_notation(notation[0])
+  );
 }
 
 
@@ -132,7 +142,7 @@ cpp11::strings c_biginteger_multiply(cpp11::strings lhs, cpp11::strings rhs) {
 cpp11::strings c_biginteger_pow(cpp11::strings lhs, cpp11::integers rhs) {
   return binary_operation(
     biginteger_vector(lhs), rhs,
-    [](const biginteger_type &x, int y) { return boost::multiprecision::pow(x, y); }
+    [](const biginteger_type &x, int y) { return mp::pow(x, y); }
   ).encode();
 }
 
@@ -208,7 +218,7 @@ cpp11::strings c_biginteger_cummin(cpp11::strings x) {
 cpp11::strings c_biginteger_abs(cpp11::strings lhs) {
   return unary_operation(
     biginteger_vector(lhs),
-    [](const biginteger_type &x) { return boost::multiprecision::abs(x); }
+    [](const biginteger_type &x) { return mp::abs(x); }
   ).encode();
 }
 

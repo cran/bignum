@@ -16,8 +16,8 @@ c_bigfloat_to_double <- function(x) {
   .Call(`_bignum_c_bigfloat_to_double`, x)
 }
 
-c_bigfloat_format <- function(x) {
-  .Call(`_bignum_c_bigfloat_format`, x)
+c_bigfloat_format <- function(x, notation, digits, is_sigfig) {
+  .Call(`_bignum_c_bigfloat_format`, x, notation, digits, is_sigfig)
 }
 
 c_bigfloat_compare <- function(lhs, rhs, na_equal) {
@@ -180,6 +180,14 @@ c_bigfloat_lgamma <- function(lhs) {
   .Call(`_bignum_c_bigfloat_lgamma`, lhs)
 }
 
+c_bigfloat_digamma <- function(lhs) {
+  .Call(`_bignum_c_bigfloat_digamma`, lhs)
+}
+
+c_bigfloat_trigamma <- function(lhs) {
+  .Call(`_bignum_c_bigfloat_trigamma`, lhs)
+}
+
 c_biginteger <- function(x) {
   .Call(`_bignum_c_biginteger`, x)
 }
@@ -196,8 +204,8 @@ c_biginteger_to_double <- function(x) {
   .Call(`_bignum_c_biginteger_to_double`, x)
 }
 
-c_biginteger_format <- function(x) {
-  .Call(`_bignum_c_biginteger_format`, x)
+c_biginteger_format <- function(x, notation) {
+  .Call(`_bignum_c_biginteger_format`, x, notation)
 }
 
 c_biginteger_compare <- function(lhs, rhs, na_equal) {

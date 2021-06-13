@@ -1,7 +1,10 @@
 #include <cpp11.hpp>
+#include "bigfloat_vector.h"
 #include "operations.h"
 #include "compare.h"
-#include "bigfloat_vector.h"
+#include "format.h"
+
+namespace mp = boost::multiprecision;
 
 
 [[cpp11::register]]
@@ -24,7 +27,7 @@ cpp11::logicals c_bigfloat_to_logical(cpp11::strings x) {
 
     if (input.is_na[i]) {
       output[i] = NA_LOGICAL;
-    } else if (boost::multiprecision::isnan(input.data[i])) {
+    } else if (mp::isnan(input.data[i])) {
       output[i] = NA_LOGICAL;
     } else {
       output[i] = input.data[i] == 0 ? FALSE : TRUE;
@@ -49,7 +52,7 @@ cpp11::integers c_bigfloat_to_integer(cpp11::strings x) {
 
     if (input.is_na[i]) {
       output[i] = NA_INTEGER;
-    } else if (boost::multiprecision::isnan(input.data[i])) {
+    } else if (mp::isnan(input.data[i])) {
       output[i] = NA_INTEGER;
     } else if (input.data[i] < vmin || input.data[i] > vmax) {
       output[i] = NA_INTEGER;
@@ -86,11 +89,23 @@ cpp11::doubles c_bigfloat_to_double(cpp11::strings x) {
  *  Other  *
  *---------*/
 [[cpp11::register]]
-cpp11::strings c_bigfloat_format(cpp11::strings x) {
-  std::stringstream ss;
-  ss.precision(std::numeric_limits<bigfloat_type>::digits10);
+cpp11::strings c_bigfloat_format(cpp11::strings x,
+                                 cpp11::strings notation,
+                                 cpp11::integers digits,
+                                 bool is_sigfig) {
+  if (notation.size() != 1) {
+    cpp11::stop("`notation` must be a scalar."); // # nocov
+  }
+  if (digits.size() != 1) {
+    cpp11::stop("`digits` must be a scalar."); // # nocov
+  }
 
-  return bigfloat_vector(x).format(ss);
+  return format_bigfloat_vector(
+    bigfloat_vector(x),
+    format_notation(notation[0]),
+    digits[0],
+    is_sigfig
+  );
 }
 
 
@@ -147,7 +162,7 @@ cpp11::strings c_bigfloat_divide(cpp11::strings lhs, cpp11::strings rhs) {
 cpp11::strings c_bigfloat_pow(cpp11::strings lhs, cpp11::strings rhs) {
   return binary_operation(
     bigfloat_vector(lhs), bigfloat_vector(rhs),
-    [](const bigfloat_type &x, const bigfloat_type & y) { return boost::multiprecision::pow(x, y); }
+    [](const bigfloat_type &x, const bigfloat_type & y) { return mp::pow(x, y); }
   ).encode();
 }
 
@@ -155,7 +170,7 @@ cpp11::strings c_bigfloat_pow(cpp11::strings lhs, cpp11::strings rhs) {
 cpp11::strings c_bigfloat_modulo(cpp11::strings lhs, cpp11::strings rhs) {
   return binary_operation(
     bigfloat_vector(lhs), bigfloat_vector(rhs),
-    [](const bigfloat_type &x, const bigfloat_type &y) { return boost::multiprecision::fmod(x, y); }
+    [](const bigfloat_type &x, const bigfloat_type &y) { return mp::fmod(x, y); }
   ).encode();
 }
 
@@ -215,7 +230,7 @@ cpp11::strings c_bigfloat_cummin(cpp11::strings x) {
 cpp11::strings c_bigfloat_abs(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::abs(x); }
+    [](const bigfloat_type &x) { return mp::abs(x); }
   ).encode();
 }
 
@@ -231,7 +246,7 @@ cpp11::strings c_bigfloat_sign(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_sqrt(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::sqrt(x); }
+    [](const bigfloat_type &x) { return mp::sqrt(x); }
   ).encode();
 }
 
@@ -239,7 +254,7 @@ cpp11::strings c_bigfloat_sqrt(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_ceiling(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::ceil(x); }
+    [](const bigfloat_type &x) { return mp::ceil(x); }
   ).encode();
 }
 
@@ -247,7 +262,7 @@ cpp11::strings c_bigfloat_ceiling(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_floor(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::floor(x); }
+    [](const bigfloat_type &x) { return mp::floor(x); }
   ).encode();
 }
 
@@ -255,7 +270,7 @@ cpp11::strings c_bigfloat_floor(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_trunc(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::trunc(x); }
+    [](const bigfloat_type &x) { return mp::trunc(x); }
   ).encode();
 }
 
@@ -263,7 +278,7 @@ cpp11::strings c_bigfloat_trunc(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_exp(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::exp(x); }
+    [](const bigfloat_type &x) { return mp::exp(x); }
   ).encode();
 }
 
@@ -271,7 +286,7 @@ cpp11::strings c_bigfloat_exp(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_expm1(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::expm1(x); }
+    [](const bigfloat_type &x) { return mp::expm1(x); }
   ).encode();
 }
 
@@ -279,7 +294,7 @@ cpp11::strings c_bigfloat_expm1(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_log(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::log(x); }
+    [](const bigfloat_type &x) { return mp::log(x); }
   ).encode();
 }
 
@@ -287,7 +302,7 @@ cpp11::strings c_bigfloat_log(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_log10(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::log10(x); }
+    [](const bigfloat_type &x) { return mp::log10(x); }
   ).encode();
 }
 
@@ -295,7 +310,7 @@ cpp11::strings c_bigfloat_log10(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_log2(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::log2(x); }
+    [](const bigfloat_type &x) { return mp::log2(x); }
   ).encode();
 }
 
@@ -303,7 +318,7 @@ cpp11::strings c_bigfloat_log2(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_log1p(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::log1p(x); }
+    [](const bigfloat_type &x) { return mp::log1p(x); }
   ).encode();
 }
 
@@ -311,7 +326,7 @@ cpp11::strings c_bigfloat_log1p(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_cos(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::cos(x); }
+    [](const bigfloat_type &x) { return mp::cos(x); }
   ).encode();
 }
 
@@ -319,7 +334,7 @@ cpp11::strings c_bigfloat_cos(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_cosh(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::cosh(x); }
+    [](const bigfloat_type &x) { return mp::cosh(x); }
   ).encode();
 }
 
@@ -327,7 +342,7 @@ cpp11::strings c_bigfloat_cosh(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_sin(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::sin(x); }
+    [](const bigfloat_type &x) { return mp::sin(x); }
   ).encode();
 }
 
@@ -335,7 +350,7 @@ cpp11::strings c_bigfloat_sin(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_sinh(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::sinh(x); }
+    [](const bigfloat_type &x) { return mp::sinh(x); }
   ).encode();
 }
 
@@ -343,7 +358,7 @@ cpp11::strings c_bigfloat_sinh(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_tan(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::tan(x); }
+    [](const bigfloat_type &x) { return mp::tan(x); }
   ).encode();
 }
 
@@ -351,7 +366,7 @@ cpp11::strings c_bigfloat_tan(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_tanh(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::tanh(x); }
+    [](const bigfloat_type &x) { return mp::tanh(x); }
   ).encode();
 }
 
@@ -359,7 +374,7 @@ cpp11::strings c_bigfloat_tanh(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_acos(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::acos(x); }
+    [](const bigfloat_type &x) { return mp::acos(x); }
   ).encode();
 }
 
@@ -367,7 +382,7 @@ cpp11::strings c_bigfloat_acos(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_acosh(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::acosh(x); }
+    [](const bigfloat_type &x) { return mp::acosh(x); }
   ).encode();
 }
 
@@ -375,7 +390,7 @@ cpp11::strings c_bigfloat_acosh(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_asin(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::asin(x); }
+    [](const bigfloat_type &x) { return mp::asin(x); }
   ).encode();
 }
 
@@ -383,7 +398,7 @@ cpp11::strings c_bigfloat_asin(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_asinh(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::asinh(x); }
+    [](const bigfloat_type &x) { return mp::asinh(x); }
   ).encode();
 }
 
@@ -391,7 +406,7 @@ cpp11::strings c_bigfloat_asinh(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_atan(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::atan(x); }
+    [](const bigfloat_type &x) { return mp::atan(x); }
   ).encode();
 }
 
@@ -399,7 +414,7 @@ cpp11::strings c_bigfloat_atan(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_atanh(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::atanh(x); }
+    [](const bigfloat_type &x) { return mp::atanh(x); }
   ).encode();
 }
 
@@ -407,7 +422,7 @@ cpp11::strings c_bigfloat_atanh(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_gamma(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::tgamma(x); }
+    [](const bigfloat_type &x) { return mp::tgamma(x); }
   ).encode();
 }
 
@@ -415,6 +430,22 @@ cpp11::strings c_bigfloat_gamma(cpp11::strings lhs) {
 cpp11::strings c_bigfloat_lgamma(cpp11::strings lhs) {
   return unary_operation(
     bigfloat_vector(lhs),
-    [](const bigfloat_type &x) { return boost::multiprecision::lgamma(x); }
+    [](const bigfloat_type &x) { return mp::lgamma(x); }
+  ).encode();
+}
+
+[[cpp11::register]]
+cpp11::strings c_bigfloat_digamma(cpp11::strings lhs) {
+  return unary_operation(
+    bigfloat_vector(lhs),
+    [](const bigfloat_type &x) { return boost::math::digamma(x); }
+  ).encode();
+}
+
+[[cpp11::register]]
+cpp11::strings c_bigfloat_trigamma(cpp11::strings lhs) {
+  return unary_operation(
+    bigfloat_vector(lhs),
+    [](const bigfloat_type &x) { return boost::math::trigamma(x); }
   ).encode();
 }
