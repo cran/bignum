@@ -1,6 +1,6 @@
 Package: bignum
 Title: Arbitrary-Precision Integer and Floating-Point Mathematics
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: 
     person(given = "David",
            family = "Hall",
@@ -27,8 +27,8 @@ Encoding: UTF-8
 RoxygenNote: 7.1.1
 SystemRequirements: C++11
 NeedsCompilation: yes
-Packaged: 2021-06-15 23:57:26 UTC; david
+Packaged: 2021-09-21 15:40:44 UTC; david
 Author: David Hall [aut, cre, cph] (<https://orcid.org/0000-0002-2193-0480>)
 Maintainer: David Hall <david.hall.physics@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-06-17 07:40:06 UTC
+Date/Publication: 2021-09-21 16:00:02 UTC
