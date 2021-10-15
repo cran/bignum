@@ -177,12 +177,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bigfloat</span>(<span class="dv">1234567890123</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bigfloat[1]&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1234567890123</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">bigfloat</span>(<span class="fl">1234567890123.4</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bigfloat[1]&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1.234568e+12</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">bigfloat</span>(<span class="dv">12345678901234</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bigfloat[1]&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1.234568e+13</span></span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bigfloat</span>(<span class="fl">1234567890123.4</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bigfloat[1]&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1.234568e+12</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">bigfloat</span>(<span class="dv">12345678901234</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bigfloat[1]&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1.234568e+13</span></span></code></pre></div>
 </div>
 <div id="custom-formatting" class="section level3">
 <h3>Custom formatting</h3>
@@ -192,17 +194,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">notation =</span> <span class="st">&quot;dec&quot;</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0.12345&quot; &quot;1.2345&quot;  &quot;12.345&quot;  &quot;123.45&quot;  &quot;1234.5&quot;  &quot;12345&quot;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">notation =</span> <span class="st">&quot;sci&quot;</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1.2345e-01&quot; &quot;1.2345e+00&quot; &quot;1.2345e+01&quot; &quot;1.2345e+02&quot; &quot;1.2345e+03&quot;</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] &quot;1.2345e+04&quot;</span></span></code></pre></div>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">notation =</span> <span class="st">&quot;sci&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1.2345e-01&quot; &quot;1.2345e+00&quot; &quot;1.2345e+01&quot; &quot;1.2345e+02&quot; &quot;1.2345e+03&quot;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] &quot;1.2345e+04&quot;</span></span></code></pre></div>
 <p>The default formatting also decides the total number of digits to show based on the <code>&quot;bignum.sigfig&quot;</code> option. The <code>format()</code> function supports overriding this value using the <code>sigfig</code> argument.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">sigfig =</span> <span class="dv">3</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0.123&quot; &quot;1.23&quot;  &quot;12.3&quot;  &quot;123.&quot;  &quot;1235.&quot; &quot;12345&quot;</span></span></code></pre></div>
 <p>But <code>format()</code> also supports specifying how many digits to display <em>after</em> the decimal point, using the <code>digits</code> argument. If the value is positive, we show <em>exactly</em> that many digits. If the value is negative, we show <em>at most</em> that many digits (i.e. terminal zeros can be hidden).</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">digits =</span> <span class="dv">2</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0.12&quot;     &quot;1.23&quot;     &quot;12.35&quot;    &quot;123.45&quot;   &quot;1234.50&quot;  &quot;12345.00&quot;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">digits =</span> <span class="sc">-</span><span class="dv">2</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0.12&quot;   &quot;1.23&quot;   &quot;12.35&quot;  &quot;123.45&quot; &quot;1234.5&quot; &quot;12345&quot;</span></span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(x, <span class="at">digits =</span> <span class="sc">-</span><span class="dv">2</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0.12&quot;   &quot;1.23&quot;   &quot;12.35&quot;  &quot;123.45&quot; &quot;1234.5&quot; &quot;12345&quot;</span></span></code></pre></div>
 </div>
 </div>
 <div id="tibble-columns" class="section level2">

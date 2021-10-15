@@ -1,3 +1,13 @@
+# bignum 0.3.0
+
+* New `seq.bignum_vctr()` for generating sequences of `biginteger` or `bigfloat` (#30).
+
+* To suppress lossy cast warnings, you should now use `suppressWarnings()` (#29).
+    * If using R 4.1+, we recommend `suppressWarnings(expr, classes = "bignum_warning_cast_lossy")`.
+    * Compatible with rlang 1.0.0.
+
+* `vignette("operations")` has been removed and this documentation has been moved to man topics.
+
 # bignum 0.2.2
 
 * Adapted tests for testthat 3.1.0 (#27).
