@@ -18,11 +18,17 @@ status](https://codecov.io/gh/davidchall/bignum/branch/master/graph/badge.svg)](
 bignum provides numeric vectors with greater precision than R atomic
 numeric vectors.
 
--   `biginteger()` stores any integer (i.e. arbitrary precision).
--   `bigfloat()` stores 50 decimal digits of precision.
+- `biginteger()` stores any integer (i.e. arbitrary precision).
+- `bigfloat()` stores 50 decimal digits of precision.
 
 They prioritize precision over performance, so computations are slower
 than those using `integer()` or `double()`.
+
+Under the hood, bignum uses the
+[cpp_int](https://www.boost.org/doc/libs/1_77_0/libs/multiprecision/doc/html/boost_multiprecision/tut/ints/cpp_int.html)
+and
+[cpp_bin_float_50](https://www.boost.org/doc/libs/1_77_0/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html)
+data types from the Boost.Multiprecision C++ library.
 
 ## Installation
 
