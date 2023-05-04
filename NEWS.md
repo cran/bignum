@@ -1,3 +1,7 @@
+# bignum 0.3.2
+
+Fix for CRAN checks.
+
 # bignum 0.3.1
 
 * `biginteger()` now accepts strings with leading zeros (#37).
